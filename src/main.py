@@ -18,14 +18,6 @@ POSTGRES_URI = os.getenv("POSTGRES_URI")
 # Base declarativa do SQLAlchemy
 Base = declarative_base()
 
-# Configurar a engine globalmente
-engine = create_engine(POSTGRES_URI, echo=True)  # echo=True para mostrar logs de SQL
-Base.metadata.create_all(engine)  # Cria as tabelas no banco de dados
-print("Tabelas criadas (se não existiam).")
-
-# Configurar a sessão do SQLAlchemy
-Session = sessionmaker(bind=engine)
-
 # Modelo da tabela usando SQLAlchemy
 class BitcoinDataModel(Base):
     __tablename__ = "bitcoin_data"
@@ -43,6 +35,14 @@ class BitcoinData(BaseModel):
 
 class ApiResponse(BaseModel):
     data: BitcoinData
+
+# Configurar a engine globalmente
+engine = create_engine(POSTGRES_URI, echo=True)  # echo=True para mostrar logs de SQL
+Base.metadata.create_all(engine)  # Cria as tabelas no banco de dados
+print("Tabelas criadas (se não existiam).")
+
+# Configurar a sessão do SQLAlchemy
+Session = sessionmaker(bind=engine)
 
 def test_connection():
     """Testa a conexão com o banco PostgreSQL."""
